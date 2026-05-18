@@ -1,9 +1,6 @@
 "use client"
 import { LoaderPinwheel } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-
-
 import DefaultPage from "./components/DefaultPage";
 import ChatForm from "./components/ChatForm";
 import MessageList from "./components/MessageList";
@@ -13,10 +10,11 @@ import { useChat } from "@/hooks/use-chat";
 
 export default function Home() {
 
-  const { messages, setInput, input, isFirstInteraction, handleSubmit, isLoading, models } = useChat()
+  const { messages, setInput, input, isFirstInteraction, handleSubmit, isLoading, models, selectedModel, setSelectedModel } = useChat()
 
   return (
     <main className="bg-background min-h-screen w-full">
+      <ModelsDropdown setSelectedModel={setSelectedModel} selectedModel={selectedModel} />
       <div className="max-w-5xl mx-auto h-screen flex flex-col">
 
 
@@ -24,7 +22,6 @@ export default function Home() {
         {isFirstInteraction ? (
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <DefaultPage />
-
             <div className="w-full mt-8">
               <ChatForm
                 handleSubmit={handleSubmit}

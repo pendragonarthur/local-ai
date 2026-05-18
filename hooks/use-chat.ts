@@ -8,6 +8,8 @@ type Message = {
     content: string
 }
 
+const decoder = new TextDecoder()
+
 export function useChat() {
     const [messages, setMessages] = useState<Message[]>([])
     const [input, setInput] = useState<string>("")
@@ -15,6 +17,7 @@ export function useChat() {
     const [isFirstInteraction, setIsFirstInteraction] = useState<boolean>(true)
     const [models, setModels] = useState<string[]>([])
     const [selectedModel, setSelectedModel] = useState("")
+
 
     useEffect(() => {
         async function fetchModels() {
@@ -32,7 +35,6 @@ export function useChat() {
                 console.log(error)
             }
         }
-
         fetchModels()
     }, [])
 
@@ -40,29 +42,58 @@ export function useChat() {
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault()
         setIsFirstInteraction(false)
-        const currentInput = input
-
-        const userMessage = { role: "user", content: input };
-        setMessages((prevMessages) => [...prevMessages, userMessage]);
-
         setInput("")
         setIsLoading(true)
 
+        let userMessage = input
+
+        setMessages([...messages, {
+            role: 'user', content: userMessage
+        }, { role: 'assistant', content: '' }])
+
         try {
-            const response = await axios.post("/api/chat", {
-                message: currentInput,
-                model: selectedModel
+            const response = await fetch("/api/chat", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage, model: selectedModel })
             })
 
-            if (!response) {
-                throw new Error("Failed to get response")
+            if (!response.ok) {
+                throw new Error(`HTTP error status: ${response.status}`)
             }
 
-            const aiMessage = {
-                role: "assistant",
-                content: response.data.message,
-            };
-            setMessages((prevMessages) => [...prevMessages, aiMessage])
+            const body = response.body
+
+            if (!body) {
+                throw new Error(`HTTP error status: ${response.status}`)
+            }
+
+            const reader = body.getReader()
+
+            while (true) {
+                setIsLoading(false)
+                let { value: chunk, done: readerDone } = await reader.read()
+                let text = decoder.decode(chunk, { stream: true })
+                if (readerDone) {
+                    break
+                }
+
+                setMessages((prev) => {
+
+                    let updated = [...prev]
+                    let lastIndex = updated.length - 1
+                    const lastMessage = {
+                        ...updated[lastIndex]
+                    }
+                    lastMessage.content += text
+                    updated[lastIndex] = lastMessage
+
+                    return updated
+                })
+
+            }
         } catch (error) {
             console.error("Error:", error);
             const errorMessage = {
