@@ -184,10 +184,12 @@
 
   html {
     @apply font-sans antialiased;
+    overflow: hidden
   }
 
   body {
     @apply bg-background text-foreground;
+    overflow: hidden
   }
 
   ::selection {

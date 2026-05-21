@@ -7,13 +7,14 @@ import MessageList from "./components/MessageList";
 import ModelsDropdown from "./components/ModelsDropdown";
 
 import { useChat } from "@/hooks/use-chat";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
 
   const { messages, setInput, input, isFirstInteraction, handleSubmit, isLoading, models, selectedModel, setSelectedModel } = useChat()
 
   return (
-    <main className="bg-background min-h-screen w-full">
+    <main className="bg-background h-screen w-full overflow-hidden">
       <ModelsDropdown setSelectedModel={setSelectedModel} selectedModel={selectedModel} />
       <div className="max-w-5xl mx-auto h-screen flex flex-col">
 

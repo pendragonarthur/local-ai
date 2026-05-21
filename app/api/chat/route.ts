@@ -1,17 +1,48 @@
 import { Ollama } from "ollama";
 export const runtime = 'nodejs'
+import prisma from "@/lib/prisma";
+import { Chat } from "@/app/generated/prisma/client";
 
 const ollama = new Ollama({ host: process.env.OLLAMA_HOST ?? 'http://127.0.0.1:11434' })
 
 export async function POST(request: Request) {
     try {
         const { message, model } = await request.json();
-        console.log({ message, model })
-
         const encoder = new TextEncoder()
 
-        const stream = new ReadableStream({
+        const title = message.slice(0, 30)
 
+        const chat = await prisma.chat.create({
+            data: {
+                title,
+                model
+            }
+        })
+
+        async function createUserMessage(chat: Chat) {
+            await prisma.message.create({
+                data: {
+                    chatId: chat.id,
+                    role: 'user',
+                    content: message
+                }
+            })
+        }
+
+        async function createAssistantMessage(chat: Chat, assistantContent: string) {
+            await prisma.message.create({
+                data: {
+                    chatId: chat.id,
+                    role: 'assistant',
+                    content: assistantContent
+                }
+            })
+        }
+        await createUserMessage(chat)
+
+        let assistantContent = '';
+
+        const stream = new ReadableStream({
             async start(controller) {
                 try {
                     const response = await ollama.chat({
@@ -19,14 +50,15 @@ export async function POST(request: Request) {
                         messages: [{ role: 'user', content: `Leia o prompt e responda em português brasileiro. PROMPT: ${message}` }],
                         stream: true
                     })
-
                     for await (const chunk of response) {
-                        let content = chunk.message.content
+                        const content = chunk.message.content
                         if (content) {
                             const encondedChunk = encoder.encode(content)
                             controller.enqueue(encondedChunk)
+                            assistantContent += content
                         }
                     }
+                    await createAssistantMessage(chat, assistantContent)
                     controller.close()
                 } catch (error) {
                     console.log(error, 'Erro no streaming da LLM')
