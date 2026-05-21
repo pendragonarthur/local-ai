@@ -33,11 +33,11 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
       <body className="min-h-screen flex bg-background text-foreground">
-        <SidebarProvider className="min-w-xs">
+        <SidebarProvider className="">
           <SidebarTrigger className="text-foreground" />
           <AppSidebar />
           <main className="flex-1 flex flex-col w-full">
-            <div className="p-4 bg-background">
+            <div className="bg-background">
             </div>
             {children}
           </main>

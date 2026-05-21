@@ -60,72 +60,110 @@
 }
 
 /* =========================================================
-   CORE DESIGN TOKENS
+   DIGITAL MINIMALISM + MATRIX TOKENS
 ========================================================= */
 
 :root {
   --radius: 1rem;
 
-  /* BACKGROUNDS */
-  --background: #05070b;
-  --foreground: #f3f4f6;
+  /* ======================================================
+     CORE BACKGROUNDS
+  ====================================================== */
 
-  --card: #10141c;
-  --card-foreground: #f3f4f6;
+  --background: #050505;
+  --foreground: #f5f5f5;
 
-  --popover: #0b0f15;
-  --popover-foreground: #f3f4f6;
+  --card: #0c0c0c;
+  --card-foreground: #f5f5f5;
 
-  /* PRIMARY */
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
+  --popover: #090909;
+  --popover-foreground: #f5f5f5;
 
-  /* SECONDARY */
-  --secondary: #151b24;
-  --secondary-foreground: #f3f4f6;
+  /* ======================================================
+     PRIMARY MATRIX GREEN
+  ====================================================== */
 
-  /* MUTED */
-  --muted: #10141c;
+  --primary: #00ff88;
+  --primary-foreground: #03120a;
+
+  /* ======================================================
+     SECONDARY / SURFACES
+  ====================================================== */
+
+  --secondary: #121212;
+  --secondary-foreground: #e5e5e5;
+
+  --muted: #101010;
   --muted-foreground: #6b7280;
 
-  /* ACCENT */
-  --accent: #151b24;
-  --accent-foreground: #f3f4f6;
+  --accent: #181818;
+  --accent-foreground: #ffffff;
 
-  /* STATES */
-  --destructive: #ef4444;
+  /* ======================================================
+     STATES
+  ====================================================== */
 
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --destructive: #ff3b5c;
 
-  /* INPUTS */
-  --border: #1b2430;
-  --input: #10141c;
-  --ring: #3b82f6;
+  --success: #00ff88;
+  --warning: #ffb020;
+  --danger: #ff3b5c;
 
-  /* SIDEBAR */
-  --sidebar: #0b0f15;
-  --sidebar-foreground: #f3f4f6;
+  /* ======================================================
+     INPUTS / BORDERS
+  ====================================================== */
 
-  --sidebar-primary: #3b82f6;
-  --sidebar-primary-foreground: #ffffff;
+  --border: #1e1e1e;
+  --input: #111111;
 
-  --sidebar-accent: #151b24;
-  --sidebar-accent-foreground: #f3f4f6;
+  --ring: #00ff88;
 
-  --sidebar-border: #1b2430;
-  --sidebar-ring: #3b82f6;
+  /* ======================================================
+     SIDEBAR
+  ====================================================== */
 
-  /* CHARTS */
-  --chart-1: #3b82f6;
-  --chart-2: #6366f1;
-  --chart-3: #10b981;
-  --chart-4: #f59e0b;
-  --chart-5: #ef4444;
+  --sidebar: #080808;
+  --sidebar-foreground: #f5f5f5;
 
-  /* EFFECTS */
-  --glow-blue: rgba(79, 140, 255, 0.35);
+  --sidebar-primary: #00ff88;
+  --sidebar-primary-foreground: #03120a;
+
+  --sidebar-accent: #151515;
+  --sidebar-accent-foreground: #f5f5f5;
+
+  --sidebar-border: #1a1a1a;
+  --sidebar-ring: #00ff88;
+
+  /* ======================================================
+     CHARTS
+  ====================================================== */
+
+  --chart-1: #00ff88;
+  --chart-2: #00d9ff;
+  --chart-3: #9d4edd;
+  --chart-4: #ffb020;
+  --chart-5: #ff3b5c;
+
+  /* ======================================================
+     EFFECTS
+  ====================================================== */
+
+  --glow-green: rgba(0, 255, 136, 0.25);
+  --glow-cyan: rgba(0, 217, 255, 0.18);
+
+  /* ======================================================
+     EXTRA TOKENS
+  ====================================================== */
+
+  --gradient-dark:
+    linear-gradient(180deg,
+      rgba(12, 12, 12, 1) 0%,
+      rgba(5, 5, 5, 1) 100%);
+
+  --gradient-matrix:
+    linear-gradient(135deg,
+      rgba(0, 255, 136, 0.08),
+      rgba(0, 217, 255, 0.04));
 }
 
 /* =========================================================
@@ -133,44 +171,44 @@
 ========================================================= */
 
 .dark {
-  --background: #05070b;
-  --foreground: #f3f4f6;
+  --background: #050505;
+  --foreground: #f5f5f5;
 
-  --card: #10141c;
-  --card-foreground: #f3f4f6;
+  --card: #0c0c0c;
+  --card-foreground: #f5f5f5;
 
-  --popover: #0b0f15;
-  --popover-foreground: #f3f4f6;
+  --popover: #090909;
+  --popover-foreground: #f5f5f5;
 
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
+  --primary: #00ff88;
+  --primary-foreground: #03120a;
 
-  --secondary: #151b24;
-  --secondary-foreground: #f3f4f6;
+  --secondary: #121212;
+  --secondary-foreground: #e5e5e5;
 
-  --muted: #10141c;
+  --muted: #101010;
   --muted-foreground: #6b7280;
 
-  --accent: #151b24;
-  --accent-foreground: #f3f4f6;
+  --accent: #181818;
+  --accent-foreground: #ffffff;
 
-  --destructive: #ef4444;
+  --destructive: #ff3b5c;
 
-  --border: #1b2430;
-  --input: #10141c;
-  --ring: #3b82f6;
+  --border: #1e1e1e;
+  --input: #111111;
+  --ring: #00ff88;
 
-  --sidebar: #0b0f15;
-  --sidebar-foreground: #f3f4f6;
+  --sidebar: #080808;
+  --sidebar-foreground: #f5f5f5;
 
-  --sidebar-primary: #3b82f6;
-  --sidebar-primary-foreground: #ffffff;
+  --sidebar-primary: #00ff88;
+  --sidebar-primary-foreground: #03120a;
 
-  --sidebar-accent: #151b24;
-  --sidebar-accent-foreground: #f3f4f6;
+  --sidebar-accent: #151515;
+  --sidebar-accent-foreground: #f5f5f5;
 
-  --sidebar-border: #1b2430;
-  --sidebar-ring: #3b82f6;
+  --sidebar-border: #1a1a1a;
+  --sidebar-ring: #00ff88;
 }
 
 /* =========================================================
@@ -184,16 +222,38 @@
 
   html {
     @apply font-sans antialiased;
-    overflow: hidden
+    overflow: hidden;
+
+    background: var(--background);
   }
 
   body {
     @apply bg-background text-foreground;
-    overflow: hidden
-  }
 
-  ::selection {
-    background: rgba(59, 130, 246, 0.3);
-    color: white;
+    overflow: hidden;
+
+
   }
+}
+
+/* ======================================================
+     SCROLLBAR
+  ====================================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090909;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f1f1f;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff88;
 }

@@ -15,11 +15,11 @@ export default function ChatForm({ input, setInput, handleSubmit }: ChatFormProp
     return (
         <form onSubmit={handleSubmit}>
             <div>
-                <FieldSet>
-                    <InputGroup className="h-full p-2">
+                <FieldSet className="border-1 rounded-sm">
+                    <InputGroup className="h-full border-0 p-2">
                         <Dropdown />
-                        <InputGroupInput placeholder="Digite sua mensagem..." value={input} onChange={(e) => setInput(e.target.value)} />
-                        <Button className="cursor-pointer bg-secondary" type="submit"><Send className="text-muted-foreground" /></Button>
+                        <InputGroupInput className="bg-transparent" placeholder="Digite sua mensagem..." value={input} onChange={(e) => setInput(e.target.value)} />
+                        <Button className="cursor-pointer bg-transparent hover:bg-muted" type="submit"><Send className="text-muted-foreground" /></Button>
                     </InputGroup>
                 </FieldSet>
             </div>

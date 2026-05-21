@@ -21,7 +21,7 @@ export default function ModelsDropdown({ selectedModel, setSelectedModel }: Mode
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="ml-2 bg-muted hover:bg-secondary cursor-pointer" type="button" disabled={!selectedModel} suppressHydrationWarning>
+                <Button className="ml-2 bg-transparent text-primary/50 border-accent border-1 hover:bg-secondary cursor-pointer" type="button" disabled={!selectedModel} suppressHydrationWarning>
                     {selectedModel
                         ? selectedModel
                         : <Skeleton className="h-4 w-22" />

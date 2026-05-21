@@ -15,7 +15,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon">
-            <SidebarHeader className={`border-b border-sidebar-border transition-all duration-200 ${state === "expanded" ? "items-end" : "items-center justify-center"}`} >
+            <SidebarHeader className={`border-b border-sidebar-border ${state === "expanded" ? "items-end" : "items-center justify-center"}`} >
                 <SidebarTrigger className="text-sidebar-foreground hover:bg-sidebar-accent cursor-pointer" />
             </SidebarHeader>
             <SidebarContent>

@@ -24,9 +24,9 @@ export function Dropdown() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40" align="start">
-                <DropdownMenuItem>Inserir arquivos</DropdownMenuItem>
-                <DropdownMenuItem>Criar imagem</DropdownMenuItem>
-                <DropdownMenuItem>Pesquisar na web</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Inserir arquivos</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Criar imagem</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Pesquisar na web</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )
