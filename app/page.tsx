@@ -27,7 +27,7 @@ export default function Home() {
 
           {isLoading && (
             <div className="flex justify-start mt-4">
-              <div className="bg-[#10141C]/80 border border-[#1B2430] text-[#A1AAB8] p-2 rounded-2xl backdrop-blur-md animate-pulse">
+              <div className=" border border-[#1e301b] text-[#A1AAB8] p-2 rounded-2xl backdrop-blur-md animate-pulse">
                 <LoaderPinwheel className="animate-spin text-muted-foreground" />
               </div>
             </div>

@@ -17,6 +17,9 @@ export function useChat() {
     const [isFirstInteraction, setIsFirstInteraction] = useState<boolean>(true)
     const [models, setModels] = useState<string[]>([])
     const [selectedModel, setSelectedModel] = useState("")
+    const [currentChatId, setCurrentChatID] = useState<number | null>(null)
+
+
 
 
     useEffect(() => {
@@ -52,12 +55,32 @@ export function useChat() {
         }, { role: 'assistant', content: '' }])
 
         try {
+
+            let chatId = currentChatId
+
+            if (!chatId) {
+                const createChatResponse = await fetch("api/chat/create", {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "applicantion/json"
+                    },
+                    body: JSON.stringify({
+                        model: selectedModel,
+                        firstMessage: userMessage
+                    })
+                })
+                const data = await createChatResponse.json()
+                chatId = data.chatId
+                setCurrentChatID(chatId)
+            }
+
+
             const response = await fetch("/api/chat", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: userMessage, model: selectedModel })
+                body: JSON.stringify({ message: userMessage, model: selectedModel, chatId: chatId })
             })
 
             if (!response.ok) {

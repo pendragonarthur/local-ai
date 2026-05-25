@@ -1,64 +1,62 @@
 import { Ollama } from "ollama";
 export const runtime = 'nodejs'
 import prisma from "@/lib/prisma";
-import { Chat } from "@/app/generated/prisma/client";
 
 const ollama = new Ollama({ host: process.env.OLLAMA_HOST ?? 'http://127.0.0.1:11434' })
 
 export async function POST(request: Request) {
     try {
-        const { message, model } = await request.json();
+        const { message, model, chatId } = await request.json();
         const encoder = new TextEncoder()
+        let assistantContent = '';
 
-        const title = message.slice(0, 30)
-
-        const chat = await prisma.chat.create({
-            data: {
-                title,
-                model
-            }
-        })
-
-        async function createUserMessage(chat: Chat) {
+        async function createUserMessage() {
             await prisma.message.create({
                 data: {
-                    chatId: chat.id,
+                    chatId,
                     role: 'user',
                     content: message
                 }
             })
         }
 
-        async function createAssistantMessage(chat: Chat, assistantContent: string) {
-            await prisma.message.create({
-                data: {
-                    chatId: chat.id,
-                    role: 'assistant',
-                    content: assistantContent
-                }
-            })
-        }
-        await createUserMessage(chat)
+        await createUserMessage()
 
-        let assistantContent = '';
+        const previousMessages = await prisma.message.findMany({
+            where: {
+                chatId
+            }, orderBy: {
+                createdAt: 'asc'
+            }
+        })
+
+        const formattedMessages = previousMessages.map((message) => ({ role: message.role, content: message.content }))
 
         const stream = new ReadableStream({
             async start(controller) {
                 try {
                     const response = await ollama.chat({
                         model: model,
-                        messages: [{ role: 'user', content: `Leia o prompt e responda em português brasileiro. PROMPT: ${message}` }],
+                        messages: formattedMessages,
                         stream: true
                     })
                     for await (const chunk of response) {
                         const content = chunk.message.content
                         if (content) {
-                            const encondedChunk = encoder.encode(content)
-                            controller.enqueue(encondedChunk)
+                            const encodedChunk = encoder.encode(content)
+                            controller.enqueue(encodedChunk)
                             assistantContent += content
                         }
                     }
-                    await createAssistantMessage(chat, assistantContent)
+
+                    await prisma.message.create({
+                        data: {
+                            chatId,
+                            role: 'assistant',
+                            content: assistantContent
+                        }
+                    })
+
                     controller.close()
                 } catch (error) {
                     console.log(error, 'Erro no streaming da LLM')
