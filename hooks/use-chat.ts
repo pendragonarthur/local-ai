@@ -17,8 +17,7 @@ export function useChat() {
     const [isFirstInteraction, setIsFirstInteraction] = useState<boolean>(true)
     const [models, setModels] = useState<string[]>([])
     const [selectedModel, setSelectedModel] = useState("")
-    const [currentChatId, setCurrentChatID] = useState<number | null>(null)
-
+    const [currentChatId, setCurrentChatId] = useState<number | null>(null)
 
 
 
@@ -56,13 +55,13 @@ export function useChat() {
 
         try {
 
-            let chatId = currentChatId
+            let activeChatId = currentChatId
 
-            if (!chatId) {
-                const createChatResponse = await fetch("api/chat/create", {
+            if (!activeChatId) {
+                const createChatResponse = await fetch("/api/chat/create", {
                     method: 'POST',
                     headers: {
-                        "Content-Type": "applicantion/json"
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
                         model: selectedModel,
@@ -70,8 +69,8 @@ export function useChat() {
                     })
                 })
                 const data = await createChatResponse.json()
-                chatId = data.chatId
-                setCurrentChatID(chatId)
+                activeChatId = data.chatId
+                setCurrentChatId(data.chatId)
             }
 
 
@@ -80,9 +79,10 @@ export function useChat() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: userMessage, model: selectedModel, chatId: chatId })
+                body: JSON.stringify({ message: userMessage, model: selectedModel, chatId: activeChatId })
             })
 
+            window.dispatchEvent(new Event("chat-created"))
             if (!response.ok) {
                 throw new Error(`HTTP error status: ${response.status}`)
             }
@@ -131,5 +131,5 @@ export function useChat() {
 
     }
 
-    return { messages, input, setInput, isLoading, handleSubmit, isFirstInteraction, models, selectedModel, setSelectedModel }
+    return { messages, input, setInput, isLoading, handleSubmit, currentChatId, setCurrentChatId, isFirstInteraction, models, selectedModel, setSelectedModel }
 }
