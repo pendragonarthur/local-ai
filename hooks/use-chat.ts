@@ -3,15 +3,12 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 
-type Message = {
-    role: string,
-    content: string
-}
+import { UIMessage } from "@/types/chat"
 
 const decoder = new TextDecoder()
 
 export function useChat() {
-    const [messages, setMessages] = useState<Message[]>([])
+    const [messages, setMessages] = useState<UIMessage[]>([])
     const [input, setInput] = useState<string>("")
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isFirstInteraction, setIsFirstInteraction] = useState<boolean>(true)
@@ -119,7 +116,7 @@ export function useChat() {
             }
         } catch (error) {
             console.error("Error:", error);
-            const errorMessage = {
+            const errorMessage: UIMessage = {
                 role: "assistant",
                 content: "Desculpe, encontrei um error enquanto processava sua requisição."
             };

@@ -6,32 +6,21 @@ import {
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader,
-    SidebarSeparator,
     SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-import { useSidebar } from "@/components/ui/sidebar";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
-import { Ellipsis } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ChatEllipsisContent from "@/app/components/ChatEllipsisContent";
 
-type Chat = {
-    id: number,
-    title: string,
-    updatedAt: string
-}
+import { useFetchChats } from "@/hooks/use-fetch-chats";
+import { SquarePen } from "lucide-react";
+
 
 export function AppSidebar() {
-    const [chats, setChats] = useState<Chat[]>([])
-    const [isHover, setIsHover] = useState<number | null>()
-    const { state } = useSidebar()
-
-    const fetchChats = useCallback(async () => {
-        const response = await fetch("/api/chat/list")
-        const data = await response.json()
-        setChats([...data])
-    }, [])
+    const { fetchChats, chats, isHover, setIsHover, state } = useFetchChats();
+    const [openChatEllipsis, setOpenChatEllipsis] = useState<number | null>()
 
     useEffect(() => {
         fetchChats()
@@ -48,28 +37,40 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon" >
-            <SidebarHeader className={`border-b border-sidebar-border ${state === "expanded" ? "items-end" : "items-center justify-center"}`} >
+            <SidebarHeader className={`border-b border-sidebar-border flex-row items-center justify-between`}>
+                <h1 className={`${state === "collapsed" ? "hidden" : ""} px-2 text-md`}>Clover</h1>
                 <SidebarTrigger className="text-sidebar-foreground hover:bg-sidebar-accent cursor-pointer" />
             </SidebarHeader>
-
-            <SidebarGroupContent className="flex flex-col items-start gap-2 px-3 py-2 ">
-                <Button className="text-sidebar-foreground cursor-pointer hover:bg-sidebar-accent rounded-xl bg-transparent border-1 border-sidebar-border">Novo Chat</Button>
-            </SidebarGroupContent>
-            <SidebarGroupLabel className="text-sidebar-foreground flex justify-center">Histórico</SidebarGroupLabel>
-            <SidebarContent className="px-2 py-3">
-                <div className="flex flex-col gap-1">
-                    {chats.map((chat) => (
-                        <Button
-                            key={chat.id}
-                            className={cn("justify-start items-center px-3 py-2 rounded-xl text-sm bg-transparent text-sidebar-foreground hover:bg-sidebar-accent transition-all duration-200 border-1 border-sidebar-border hover:bg-sidebar-accent cursor-pointer")}
-                            onMouseEnter={() => setIsHover(chat.id)} onMouseLeave={() => setIsHover(null)}
-                        >
-                            <span className="truncate flex-1 text-left">{chat.title}</span>
-                            {isHover === chat.id && <Ellipsis className="ml-auto shrink-0 size-4 cursor-pointer" />}
-                        </Button>
-                    ))}
-                </div>
+            <SidebarContent className="px-2 py-4">
+                <SidebarGroupContent className="w-full">
+                    <Button className="text-sidebar-foreground w-full justify-start hover:bg-sidebar-accent rounded-md bg-transparent"><SquarePen /> <span className={`${state === "collapsed" ? "hidden" : ""}`}> Novo Chat</span></Button>
+                </SidebarGroupContent>
+                <SidebarGroupLabel className="text-zinc-500 flex items-center justify-start"> Recentes
+                </SidebarGroupLabel>
+                <SidebarGroupContent>
+                    <div className={`flex flex-col gap-1 ${state === "collapsed" ? "hidden" : ""}`}>
+                        {chats.map((chat) => (
+                            <div
+                                key={chat.id}
+                                className={cn("justify-start items-center px-2 flex py-2 text-sm rounded-md text-sidebar-foreground hover:bg-sidebar-accent transition-all duration-200 cursor-pointer")}
+                                onMouseEnter={() => setIsHover(chat.id)}
+                                onMouseLeave={() => {
+                                    if (openChatEllipsis !== chat.id) setIsHover(null)
+                                }}
+                            >
+                                <p className="truncate flex-1 text-left">{chat.title}</p>
+                                {isHover === chat.id && (
+                                    <ChatEllipsisContent
+                                        open={openChatEllipsis === chat.id}
+                                        onOpenChange={(open: any) => setOpenChatEllipsis(open ? chat.id : null)}
+                                    />
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </SidebarGroupContent>
             </SidebarContent>
+
         </Sidebar>
     );
 }

@@ -1,16 +1,23 @@
+export type MessageRole = 'assistant' | 'user' | 'system'
+
 export type Chat = {
     id: number,
     title: string,
     model: string,
     createdAt: Date,
     updatedAt: Date,
-    messages: Message[]
+    messages: DBMessage[]
 }
 
-export type Message = {
+export type DBMessage = {
     id: number,
     chatId: number,
-    role: 'assistant' | 'user' | 'system',
+    role: MessageRole
     content: string,
     createdAt: Date
+}
+
+export type UIMessage = {
+    role: MessageRole,
+    content: string
 }

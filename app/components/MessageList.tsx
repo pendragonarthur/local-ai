@@ -1,10 +1,6 @@
-type Message = {
-    role: string,
-    content: string
-}
-
+import { UIMessage } from "@/types/chat"
 interface MessageListProps {
-    messages: Message[]
+    messages: UIMessage[]
 }
 
 export default function MessageList({ messages }: MessageListProps) {
